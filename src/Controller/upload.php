@@ -16,7 +16,7 @@
         {
             $file = $request->files->get('file');
             $label = $request->request->get('label');
-            
+            $urlWeb =$request->request->get('url');
 
             if ($file) {
 
@@ -27,12 +27,28 @@
                 $picture->setUrl($newFilename);
                 if ($label) {
                     $picture->setLabel($label);
+                }else{
+                    $picture->setLabel('');
                 }
                 $em->persist($picture);
                 $em->flush();
                 return new JsonResponse(["msg"=>"se ha movido correctamente"]);
+
+            }else if ($urlWeb) {
+
+                $picture=new Pictures();
+                $picture->setUrlWeb($urlWeb);
+                if ($label) {
+                    $picture->setLabel($label);
+                }else{
+                    $picture->setLabel('');
+                }
+                $em->persist($picture);
+                $em->flush();
+                return new JsonResponse(["msg"=>"se ha añadido la url correctamente"]);
+
             }else{
-                return new JsonResponse(["msg"=>"No se ha movido correctamente"]);
+                return new JsonResponse(["msg"=>"No se ha ejecutado correctamente"]);
             }
 
         }

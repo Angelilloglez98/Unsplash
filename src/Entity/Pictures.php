@@ -14,11 +14,14 @@ class Pictures
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 1000)]
+    #[ORM\Column(length: 1000, nullable: true)]
     private ?string $url = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $label = null;
+
+    #[ORM\Column(length: 2000, nullable: true)]
+    private ?string $urlWeb = null;
 
     public function getId(): ?int
     {
@@ -44,6 +47,18 @@ class Pictures
     public function setLabel(string $label): static
     {
         $this->label = $label;
+        return $this;
+    }
+
+    public function getUrlWeb(): ?string
+    {
+        return $this->urlWeb;
+    }
+
+    public function setUrlWeb(?string $urlWeb): static
+    {
+        $this->urlWeb = $urlWeb;
+
         return $this;
     }
 }

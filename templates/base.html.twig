@@ -1,90 +1,170 @@
-{% set films = Search('App\\Entity\\Pictures')  %}
+
+
+
+{% set filmsDes = searchEntities('App\\Entity\\Pictures', "e.label LIKE '%#{query}%'") %}
+
+{% set films = filmsDes|reverse %}
+
+
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <link href="{{ asset('styles/index.css') }}" rel="stylesheet">
-        <script src="{{ asset('scripts/sendForm.js') }}" defer></script>
-        <script src="{{ asset('scripts/HideShowForm.js') }}" defer></script>
-    </head>
-    <body>
-        <div class="filtro"></div>
-        <header>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			Unsplash!
+		</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+		<link href="{{ asset('styles/index.css') }}" rel="stylesheet">
+		<script src="{{ asset('scripts/sendForm.js') }}" defer></script>
+		<script src="{{ asset('scripts/remove.js') }}" defer></script>
+		<script src="{{ asset('scripts/HideShowForm.js') }}" defer></script>
+	</head>
+	<body>
+		
+		<div class="filtro"></div>
+		<header class="sticky-top bg-white w-100">
 
-            <div class="container-sm  d-flex justify-content-between py-4 gap-3">
-                <div class="first_header d-flex">
-                
-                    <img src="{{ asset('assets/logo.svg') }}" alt="" class="logo">
-                    
-                    <form class="search d-flex">
-                        
-                        <img src="{{ asset('assets/lupa.svg') }}" alt="" class="lupa">
-                        <input type="text" id="" class="input_search form-control">
-                        
-                    </form>
-                    
-                </div>
+			<div class="container-sm  d-flex justify-content-between py-4 gap-3">
 
-                
-                <input type="button" value="add photo" class="addPhotoButton btn btn-success">
-                
+				<div class="first_header d-flex ">
+					<a href="/" class="d-flex">
+					<img src="{{ asset('assets/logo.svg') }}" alt="" class="logo">
+					</a>
+					
 
-            </div>
+					<form class="search d-flex" id="search">
 
-        </header>
+						<img src="{{ asset('assets/lupa.svg') }}" alt="" class="lupa">
+						<input type="text" name="search" class="input_search form-control">
+						<input type="submit" hidden="true">
 
+					</form>
 
-        <div class="formulario" >
-            {# <form id="form">
-                <label>Label</label>
-                <input type="file" name="file">
-                <input type="text" name="label">
-                <input type="submit">
-            </form> #}
-            <form class="d-flex flex-column gap-3 flex-end" id="form">
-                <h2>Add a new photo</h2>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Label</label>
-                    <input type="text" class="form-control" name="label" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
-                </div>
+				</div>
 
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Photo URL</label>
-                    <input type="file" class="form-control" name="file" id="exampleInputPassword1" placeholder="Password">
-                </div>
-                <div class="buttons flex-right">
-                    <button type="button" class="btn btn-light">cancel</button>
-                    <button type="submit" class="btn btn-success">Submit</button>
-                </div>
-                
-            </form>
-        </div>
-        
-        <div class="container-sm">
-            <div class="row row-gap-3">
-                {% for film in films %}
-                   
-                    {% if film.url %}
-                            
-                        <div class="col-lg-4 col-md-6 col-sm-12">
-                            <div class="">
-                                <div class="col-12">
-                                    <img src="{{ asset('uploads/') }}{{ film.url }}" width="100%" style="img-fluid"></img>
-                                </div>
-                            </div>
-                        </div>
+				<input type="button" value="add photo" class="addPhotoButton btn btn-success">
 
-                    {% endif %}
-                    
-                {% endfor %}
-            </div>
+			</div>
 
-        </div>
-        
-    </body>
-</html> 
+		</header>
+
+		<div class="formulario">
+
+			<form class="d-flex flex-column gap-3 flex-end" id="form">
+				<h2>Add a new photo</h2>
+				<div class="form-group">
+					<label for="exampleInputEmail1">Label</label>
+					<input type="text" class="form-control" name="label" id="exampleInputEmail1" aria-describedby="emailHelp">
+				</div>
+
+				<div class="form-group">
+					<label for="exampleInputPassword1">Photo computer</label>
+					<input type="file" class="form-control" name="file" id="exampleInputPassword1">
+				</div>
+				or
+				<div class="form-group">
+					<label for="exampleInputPassword1">Photo URL</label>
+					<input type="text" class="form-control" name="url" id="exampleInputPassword1" placeholder="Url">
+				</div>
+
+				<div class="buttons flex-right">
+					<button type="button" class="btn btn-light" name="cancel">cancel</button>
+					<button type="submit" class="btn btn-success">Submit</button>
+				</div>
+
+			</form>
+
+		</div>
+
+		<div class="container-sm">
+
+			<div class="row">
+
+				{% if films is not empty %}
+					
+					<div class="col-md-4">
+						
+						{% for i in 0..(films|length-1) if i % 3 == 0 %}
+							{% set film = films[i] %}
+							<div class="mb-2 gallery-item">
+
+								{% if film.url %}
+									<img src="{{ asset('uploads/') }}{{ film.url }}" width="100%" class="img-fluid my-2 rounded" id="{{film.id}}">
+								{% elseif film.urlWeb %}
+									<img src="{{ film.urlWeb }}" width="100%" class="img-fluid my-2 rounded" id="{{film.id}}">
+								{% endif %}
+
+								<div class="label rounded">
+									<input type="button" class="btn btn-danger my-1 remove" value="remove"></input>
+									{% if film.label %}
+										<p>{{film.label}}</p>
+									{% endif %}
+								</div>
+						
+							</div>
+						{% endfor %}
+
+						
+					</div>
+
+					<div class="col-md-4">
+						
+						{% for i in 0..(films|length-1) if i % 3 == 1 %}
+							{% set film = films[i] %}
+							<div class="mb-2 gallery-item">
+
+								{% if film.url %}
+									<img src="{{ asset('uploads/') }}{{ film.url }}" width="100%" class="img-fluid my-2 rounded" id="{{film.id}}">
+								{% elseif film.urlWeb %}
+									<img src="{{ film.urlWeb }}" width="100%" class="img-fluid my-2 rounded" id="{{film.id}}">
+								{% endif %}
+
+								
+								<div class="label rounded">
+									<input type="button" class="btn btn-danger my-1 remove" value="remove"></input>
+									{% if film.label %}
+										<p>{{film.label}}</p>
+									{% endif %}
+								</div>
+								
+
+							</div>
+						{% endfor %}
+						
+					</div>
+
+					<div class="col-md-4">
+						
+						{% for i in 0..(films|length-1) if i % 3 == 2 %}
+							{% set film = films[i] %}
+							<div class="mb-2 gallery-item">
+
+								{% if film.url %}
+									<img src="{{ asset('uploads/') }}{{ film.url }}" width="100%" class="img-fluid my-2 rounded" id="{{film.id}}">
+								{% elseif film.urlWeb %}
+									<img src="{{ film.urlWeb }}" width="100%" class="img-fluid my-2 rounded" id="{{film.id}}">
+								{% endif %}
+
+								
+								<div class="label rounded">
+									<input type="button" class="btn btn-danger my-1 remove" value="remove"></input>
+									{% if film.label %}
+										<p>{{film.label}}</p>
+									{% endif %}
+								</div>
+								
+
+							</div>
+						{% endfor %}
+						
+					</div>
+
+				{% endif %}
+
+			</div>
+		</div>
+	</body>
+</html>
